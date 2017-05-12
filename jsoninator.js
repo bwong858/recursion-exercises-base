@@ -10,16 +10,8 @@ const stringify = function(obj) {
       return '"' + obj + '"';
     case 'object':
       if (obj === null) return 'null';
-      let res = '';
       if (Array.isArray(obj)) {
-        res += '[';
-        if (obj.length) {
-          for (el of obj) {
-            res += stringify(el) + ',';
-          }
-          res = res.substring(0, res.length - 1);
-        }
-        res += ']';
+        return '[' + obj.map(el => stringify(el) + ',') + ']';
       } else {
         res += '{';
         if (Object.keys(obj).length) {
