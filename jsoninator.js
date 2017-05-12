@@ -5,31 +5,61 @@ const _ = require('underscore'); // the real one! :)
 // But you don't. So you're going to write it from scratch...
 
 const stringify = function(obj) {
-  let res = '';
-  if (typeof obj === 'string') {
-    res += '"' + obj + '"';
-  } else if (typeof obj !== 'object' || obj === null) {
-    res += String(obj);
-  } else if (Array.isArray(obj)) {
-    res += '[';
-    if (obj.length) {
-      for (el of obj) {
-        res += stringify(el) + ',';
+  switch (typeof obj) {
+    case 'string':
+      return '"' + obj + '"';
+    case 'object':
+      if (obj === null) return 'null';
+      let res = '';
+      if (Array.isArray(obj)) {
+        res += '[';
+        if (obj.length) {
+          for (el of obj) {
+            res += stringify(el) + ',';
+          }
+          res = res.substring(0, res.length - 1);
+        }
+        res += ']';
+      } else {
+        res += '{';
+        if (Object.keys(obj).length) {
+          for (key in obj) {
+            res += stringify(key) + ':' + stringify(obj[key]);
+          }
+        }
+        res += '}';
       }
-      res = res.substring(0, res.length - 1);
-    }
-    res += ']';
-  } else if (typeof obj === 'object') {
-    res += '{';
-    if (Object.keys(obj).length) {
-      for (key in obj) {
-        res += stringify(key) + ':' + stringify(obj[key]);
-      }
-    }
-    res += '}';
+      return res;
+    default:
+      return String(obj);
   }
-  return res;
 };
+// const stringify = function(obj) {
+//   let res = '';
+//   if (typeof obj === 'string') {
+//     res += '"' + obj + '"';
+//   } else if (typeof obj !== 'object' || obj === null) {
+//     res += String(obj);
+//   } else if (Array.isArray(obj)) {
+//     res += '[';
+//     if (obj.length) {
+//       for (el of obj) {
+//         res += stringify(el) + ',';
+//       }
+//       res = res.substring(0, res.length - 1);
+//     }
+//     res += ']';
+//   } else if (typeof obj === 'object') {
+//     res += '{';
+//     if (Object.keys(obj).length) {
+//       for (key in obj) {
+//         res += stringify(key) + ':' + stringify(obj[key]);
+//       }
+//     }
+//     res += '}';
+//   }
+//   return res;
+// };
 
 module.exports = {
   stringify: stringify
