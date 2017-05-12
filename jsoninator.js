@@ -11,17 +11,9 @@ const stringify = function(obj) {
     case 'object':
       if (obj === null) return 'null';
       if (Array.isArray(obj)) {
-        return '[' + obj.map(el => stringify(el) + ',') + ']';
-      } else {
-        res += '{';
-        if (Object.keys(obj).length) {
-          for (key in obj) {
-            res += stringify(key) + ':' + stringify(obj[key]);
-          }
-        }
-        res += '}';
+        return '[' + obj.map(el => stringify(el)) + ']';
       }
-      return res;
+      return '{' + Object.keys(obj).map(key => stringify(key) + ':' + stringify(obj[key])) + '}';
     default:
       return String(obj);
   }
